@@ -6,6 +6,9 @@ let isPaused = false;
 let nudgeTimes = [];
 let completedNudges = new Set();
 
+// Theme state
+let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
 // Audio context for chime
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -39,8 +42,36 @@ const nudgePercentValue = document.getElementById('nudgePercentValue');
 const progressToggleBtn = document.getElementById('progressToggleBtn');
 const toggleIcon = document.getElementById('toggleIcon');
 
+// Theme toggle elements
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+
 // Progress state
 let isCircularProgress = false;
+
+// Theme functions
+function initializeTheme() {
+    if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        themeIcon.textContent = '☀️';
+    } else {
+        document.documentElement.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+    }
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    localStorage.setItem('darkMode', isDarkMode.toString());
+
+    if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        themeIcon.textContent = '☀️';
+    } else {
+        document.documentElement.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+    }
+}
 
 // Play a chime sound
 function playChime() {
@@ -252,11 +283,13 @@ function tick() {
 // Toggle progress display type
 function toggleProgressDisplay() {
     if (isCircularProgress) {
-        progressBar.style.display = 'none';
-        circularProgressContainer.style.display = 'flex';
+        progressBar.classList.add('hidden');
+        circularProgressContainer.classList.remove('hidden');
+        circularProgressContainer.classList.add('flex');
     } else {
-        progressBar.style.display = 'block';
-        circularProgressContainer.style.display = 'none';
+        progressBar.classList.remove('hidden');
+        circularProgressContainer.classList.add('hidden');
+        circularProgressContainer.classList.remove('flex');
     }
 }
 
@@ -306,7 +339,16 @@ function updatePreviewDisplay() {
     progressCircle.style.strokeDashoffset = offset;
 
     // Update nudge markers to show some as completed
-    document.querySelectorAll('.nudge-marker, .circular-nudge-marker').forEach(marker => {
+    document.querySelectorAll('.nudge-marker').forEach(marker => {
+        const markerTime = parseInt(marker.dataset.time);
+        if (previewElapsed >= markerTime) {
+            marker.classList.add('completed');
+        } else {
+            marker.classList.remove('completed');
+        }
+    });
+
+    document.querySelectorAll('.circular-nudge-marker').forEach(marker => {
         const markerTime = parseInt(marker.dataset.time);
         if (previewElapsed >= markerTime) {
             marker.classList.add('completed');
@@ -335,10 +377,10 @@ function startTimer() {
     completedNudges.clear();
 
     // Hide nudge options, start button and show timer display and time text
-    nudgeOptions.style.display = 'none';
-    startBtn.style.display = 'none';
-    timerDisplay.style.display = 'block';
-    timeText.style.display = 'block';
+    nudgeOptions.classList.add('hidden');
+    startBtn.classList.add('hidden');
+    timerDisplay.classList.remove('hidden');
+    timeText.classList.remove('hidden');
 
     // Set up progress display type
     toggleProgressDisplay();
@@ -379,10 +421,10 @@ function togglePause() {
 // Reset the timer
 function resetTimer() {
     stopTimer();
-    timerDisplay.style.display = 'none';
-    timeText.style.display = 'none';
-    nudgeOptions.style.display = 'block';
-    startBtn.style.display = 'block';
+    timerDisplay.classList.add('hidden');
+    timeText.classList.add('hidden');
+    nudgeOptions.classList.remove('hidden');
+    startBtn.classList.remove('hidden');
     completedNudges.clear();
 
     // Reset progress display to show preview state
@@ -394,6 +436,7 @@ startBtn.addEventListener('click', startTimer);
 pauseBtn.addEventListener('click', togglePause);
 resetBtn.addEventListener('click', resetTimer);
 progressToggleBtn.addEventListener('click', handleProgressToggle);
+themeToggle.addEventListener('click', toggleTheme);
 
 // Update preview when settings change
 minutesInput.addEventListener('input', updatePreviewDisplay);
@@ -421,7 +464,8 @@ minutesInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Initialize preview on page load
+// Initialize theme and preview on page load
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
     updatePreviewDisplay();
 });

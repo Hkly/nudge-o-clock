@@ -4,80 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nudge O'Clock - Interval Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/src/style.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Nudge O'Clock</h1>
-        <p class="subtitle">Timer with interval nudges to help with time blindness</p>
+<body class="min-h-screen gradient-bg flex items-center justify-center p-5 transition-colors duration-300">
+    <div class="card">
+        <h1 class="text-primary-themed text-center text-5xl font-bold mb-3">Nudge O'Clock</h1>
+        <p class="text-center text-muted-themed mb-8 text-sm">Timer with interval nudges to help with time blindness</p>
 
         <div class="timer-setup" id="timerSetup">
-            <div class="progress-section">
-                <div class="progress-toggle-container">
-                    <button id="progressToggleBtn" class="btn btn-toggle">
+            <div class="card-section">
+                <div class="flex justify-center mb-5">
+                    <button id="progressToggleBtn" class="btn-toggle">
                         <span id="toggleIcon">▬</span> Bar
                     </button>
                 </div>
 
                 <div class="time-remaining">
-                    <div id="timeText" class="time-text" style="display: none;">30:00</div>
-                    <div id="progressBar" class="progress-bar">
+                    <div id="timeText" class="text-5xl font-bold text-themed mb-5 text-center font-mono hidden">30:00</div>
+                    <div id="progressBar" class="progress-bar-container">
                         <div id="progressFill" class="progress-fill"></div>
-                        <div id="nudgeMarkers" class="nudge-markers"></div>
+                        <div id="nudgeMarkers" class="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
                     </div>
-                    <div id="circularProgressContainer" class="circular-progress-container" style="display: none;">
-                        <svg class="circular-progress" width="200" height="200">
+                    <div id="circularProgressContainer" class="flex justify-center my-5 hidden">
+                        <svg class="circular-progress transform -rotate-90" width="200" height="200">
                             <defs>
                                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                     <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
                                     <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
                                 </linearGradient>
                             </defs>
-                            <circle cx="100" cy="100" r="80" class="progress-bg"></circle>
-                            <circle cx="100" cy="100" r="80" class="progress-circle" id="progressCircle"></circle>
+                            <circle cx="100" cy="100" r="80" class="progress-bg-circle fill-none" stroke-width="24"></circle>
+                            <circle cx="100" cy="100" r="80" class="progress-circle fill-none rounded-full" stroke-width="24" stroke-linecap="round" stroke-dasharray="502.4" stroke-dashoffset="502.4" id="progressCircle"></circle>
                             <g id="circularNudgeMarkers"></g>
                         </svg>
                     </div>
                 </div>
             </div>
 
-            <div class="nudge-options" id="nudgeOptions">
-                <h3>Timer & Nudge Settings</h3>
+            <div class="nudge-options card-section" id="nudgeOptions">
+                <h3 class="mb-4 text-themed text-lg font-semibold">Timer & Nudge Settings</h3>
 
-                <div class="input-group">
-                    <label for="minutes">Timer Duration (minutes):</label>
-                    <input type="number" id="minutes" min="1" max="1440" value="30">
+                <div class="mb-6">
+                    <label for="minutes" class="block mb-2 font-semibold text-themed">Timer Duration (minutes):</label>
+                    <input type="number" id="minutes" min="1" max="1440" value="30" class="input-field">
                 </div>
 
-                <div class="nudge-type">
-                    <input type="radio" id="nudgeCount" name="nudgeType" value="count" checked>
-                    <label for="nudgeCount">Number of nudges (evenly spaced):</label>
-                    <input type="number" id="nudgeCountValue" min="1" max="10" value="1" class="inline-input">
+                <div class="mb-4 flex items-center gap-2">
+                    <input type="radio" id="nudgeCount" name="nudgeType" value="count" checked class="cursor-pointer text-primary-themed focus:ring-primary-500">
+                    <label for="nudgeCount" class="cursor-pointer text-themed">Number of nudges (evenly spaced):</label>
+                    <input type="number" id="nudgeCountValue" min="1" max="10" value="1" class="input-field-small">
                 </div>
 
-                <div class="nudge-type">
-                    <input type="radio" id="nudgePercent" name="nudgeType" value="percent">
-                    <label for="nudgePercent">Nudge at percentage:</label>
-                    <input type="number" id="nudgePercentValue" min="1" max="99" value="50" class="inline-input">
-                    <span>%</span>
+                <div class="mb-4 flex items-center gap-2">
+                    <input type="radio" id="nudgePercent" name="nudgeType" value="percent" class="cursor-pointer text-primary-themed focus:ring-primary-500">
+                    <label for="nudgePercent" class="cursor-pointer text-themed">Nudge at percentage:</label>
+                    <input type="number" id="nudgePercentValue" min="1" max="99" value="50" class="input-field-small">
+                    <span class="text-themed">%</span>
                 </div>
             </div>
-            <button id="startBtn" class="btn btn-primary">Start Timer</button>
+            <button id="startBtn" class="btn-primary">Start Timer</button>
         </div>
 
-        <div class="timer-display" id="timerDisplay" style="display: none;">
-            <div class="timer-info">
-                <div id="statusText" class="status-text">Running...</div>
-                <div id="nextNudge" class="next-nudge"></div>
+        <div class="timer-display text-center hidden" id="timerDisplay">
+            <div class="my-5">
+                <div id="statusText" class="text-xl text-primary-themed font-semibold mb-2">Running...</div>
+                <div id="nextNudge" class="text-muted-themed text-sm"></div>
             </div>
 
-            <div class="timer-controls">
-                <button id="pauseBtn" class="btn btn-secondary">Pause</button>
-                <button id="resetBtn" class="btn btn-secondary">Reset</button>
+            <div class="flex gap-2">
+                <button id="pauseBtn" class="btn-secondary">Pause</button>
+                <button id="resetBtn" class="btn-secondary">Reset</button>
             </div>
         </div>
     </div>
 
-    <script src="timer.js"></script>
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle">
+        <span id="themeIcon">🌙</span>
+    </button>
+
+    <script type="module" src="/timer.js"></script>
 </body>
 </html>

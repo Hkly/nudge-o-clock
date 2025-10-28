@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for theme variables */
+:root {
+  /* Light theme colors */
+  --color-primary: theme('colors.primary.500');
+  --color-primary-hover: theme('colors.primary.600');
+  --color-primary-light: theme('colors.primary.50');
+  --color-secondary: theme('colors.secondary.500');
+  --color-background: theme('colors.white');
+  --color-surface: theme('colors.gray.50');
+  --color-text: theme('colors.gray.800');
+  --color-text-muted: theme('colors.gray.600');
+  --color-border: theme('colors.gray.200');
+
+  /* Progress colors */
+  --color-progress-bg: theme('colors.gray.200');
+  --color-nudge-pending: theme('colors.accent.red');
+  --color-nudge-completed: theme('colors.accent.green');
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, theme('colors.primary.500') 0%, theme('colors.secondary.500') 100%);
+  --gradient-progress: linear-gradient(90deg, theme('colors.primary.500') 0%, theme('colors.secondary.500') 100%);
+}
+
+.dark {
+  /* Dark theme colors */
+  --color-primary: theme('colors.primary.400');
+  --color-primary-hover: theme('colors.primary.500');
+  --color-primary-light: theme('colors.primary.900');
+  --color-secondary: theme('colors.secondary.400');
+  --color-background: theme('colors.gray.800');
+  --color-surface: theme('colors.gray.700');
+  --color-text: theme('colors.gray.200');
+  --color-text-muted: theme('colors.gray.400');
+  --color-border: theme('colors.gray.600');
+
+  /* Progress colors */
+  --color-progress-bg: theme('colors.gray.600');
+  --color-nudge-pending: theme('colors.red.400');
+  --color-nudge-completed: theme('colors.green.400');
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, theme('colors.gray.900') 0%, theme('colors.gray.800') 100%);
+  --gradient-progress: linear-gradient(90deg, theme('colors.primary.400') 0%, theme('colors.secondary.400') 100%);
+}
+
+/* Custom component styles using CSS variables */
+@layer components {
+  .btn-primary {
+    @apply w-full p-4 text-white text-base font-semibold rounded-lg transition-all duration-300 transform hover:-translate-y-0.5;
+    background-color: var(--color-primary);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  }
+
+  .btn-secondary {
+    @apply flex-1 p-3 text-white text-base font-semibold rounded-lg transition-all duration-300;
+    background-color: theme('colors.gray.600');
+  }
+
+  .btn-secondary:hover {
+    background-color: theme('colors.gray.700');
+  }
+
+  .btn-toggle {
+    @apply px-4 py-2 text-sm font-semibold rounded-lg inline-flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5;
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-toggle:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .theme-toggle {
+    @apply fixed bottom-6 right-6 w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center text-xl;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+  }
+
+  .card {
+    @apply rounded-3xl p-10 shadow-2xl w-full max-w-2xl transition-colors duration-300;
+    background-color: var(--color-background);
+  }
+
+  .card-section {
+    @apply p-5 rounded-xl mb-6 border-2 transition-colors duration-300;
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+  }
+
+  .input-field {
+    @apply w-full p-3 border-2 rounded-lg text-base transition-colors duration-300 focus:outline-none;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+
+  .input-field:focus {
+    border-color: var(--color-primary);
+  }
+
+  .input-field-small {
+    @apply w-20 p-1.5 border-2 rounded-md text-sm transition-colors duration-300 focus:outline-none;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+
+  .input-field-small:focus {
+    border-color: var(--color-primary);
+  }
+
+  .progress-bar-container {
+    @apply w-full h-8 rounded-full relative overflow-visible;
+    background-color: var(--color-progress-bg);
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full;
+    background: var(--gradient-progress);
+    transition: width 0.3s linear;
+    width: 0%;
+  }
+
+  .text-primary-themed {
+    color: var(--color-primary);
+  }
+
+  .text-themed {
+    color: var(--color-text);
+  }
+
+  .text-muted-themed {
+    color: var(--color-text-muted);
+  }
+}
+
+/* Custom animations and utilities */
+@layer utilities {
+  .nudge-alert {
+    animation: pulse-nudge 0.5s ease-in-out 3;
+    color: var(--color-nudge-pending) !important;
+  }
+
+  .gradient-bg {
+    background: var(--gradient-primary);
+  }
+}
+
+/* Nudge marker styles */
+.nudge-marker {
+  @apply absolute -top-1 w-1 h-10 rounded-sm transform -translate-x-1/2 transition-colors duration-300;
+  background-color: var(--color-nudge-pending);
+}
+
+.nudge-marker.completed {
+  background-color: var(--color-nudge-completed);
+}
+
+.circular-nudge-marker {
+  transition: fill 0.3s ease;
+  fill: var(--color-nudge-pending);
+}
+
+.circular-nudge-marker.completed {
+  fill: var(--color-nudge-completed);
+}
+
+/* SVG progress circle styles */
+.progress-circle {
+  stroke: var(--color-primary);
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.progress-bg-circle {
+  stroke: var(--color-progress-bg);
+}
+
+/* Animation keyframes */
+@keyframes pulse-nudge {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
