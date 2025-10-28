@@ -173,8 +173,7 @@ function checkNudges() {
             // Show notification
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification('Nudge O\'Clock', {
-                    body: `Time check! ${formatTime(remainingSeconds)} remaining`,
-                    icon: '⏰'
+                    body: `Time check! ${formatTime(remainingSeconds)} remaining`
                 });
             }
         }
@@ -197,8 +196,7 @@ function tick() {
         
         if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Nudge O\'Clock', {
-                body: 'Timer complete!',
-                icon: '⏰'
+                body: 'Timer complete!'
             });
         }
     }
