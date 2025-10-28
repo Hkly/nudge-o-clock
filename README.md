@@ -78,7 +78,7 @@ npm run preview
 
 #### Available Scripts
 - `npm run dev` - Start development server on http://localhost:3000
-- `npm run build` - Build for production to `dist/` folder
+- `npm run build` - Build for production to `docs/` folder
 - `npm run preview` - Preview production build
 - `npm run clean` - Clean build directory
 
@@ -95,7 +95,7 @@ npm run preview
 nudge-o-clock/
 ├── src/
 │   └── style.css         # Main CSS with Tailwind directives
-├── dist/                 # Production build output
+├── docs/                 # Production build output (GitHub Pages)
 ├── index.html           # Main application file
 ├── timer.js            # JavaScript functionality
 ├── vite.config.js      # Vite configuration
