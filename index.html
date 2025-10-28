@@ -10,33 +10,38 @@
     <div class="container">
         <h1>Nudge O'Clock</h1>
         <p class="subtitle">Timer with interval nudges for time blindness</p>
-        
+
         <div class="timer-setup" id="timerSetup">
             <div class="input-group">
                 <label for="minutes">Timer Duration (minutes):</label>
                 <input type="number" id="minutes" min="1" max="1440" value="30">
             </div>
-            
+
             <div class="nudge-options">
                 <h3>Nudge Settings</h3>
-                
+
                 <div class="nudge-type">
                     <input type="radio" id="nudgeCount" name="nudgeType" value="count" checked>
                     <label for="nudgeCount">Number of nudges (evenly spaced):</label>
                     <input type="number" id="nudgeCountValue" min="1" max="10" value="1" class="inline-input">
                 </div>
-                
+
                 <div class="nudge-type">
                     <input type="radio" id="nudgePercent" name="nudgeType" value="percent">
                     <label for="nudgePercent">Nudge at percentage:</label>
                     <input type="number" id="nudgePercentValue" min="1" max="99" value="50" class="inline-input">
                     <span>%</span>
                 </div>
+
+                <div class="progress-type">
+                    <input type="checkbox" id="circularProgress">
+                    <label for="circularProgress">Use circular progress indicator</label>
+                </div>
             </div>
-            
+
             <button id="startBtn" class="btn btn-primary">Start Timer</button>
         </div>
-        
+
         <div class="timer-display" id="timerDisplay" style="display: none;">
             <div class="time-remaining">
                 <div id="timeText" class="time-text">30:00</div>
@@ -44,20 +49,33 @@
                     <div id="progressFill" class="progress-fill"></div>
                     <div id="nudgeMarkers" class="nudge-markers"></div>
                 </div>
+                <div id="circularProgressContainer" class="circular-progress-container" style="display: none;">
+                    <svg class="circular-progress" width="200" height="200">
+                        <defs>
+                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="100" r="80" class="progress-bg"></circle>
+                        <circle cx="100" cy="100" r="80" class="progress-circle" id="progressCircle"></circle>
+                        <g id="circularNudgeMarkers"></g>
+                    </svg>
+                </div>
             </div>
-            
+
             <div class="timer-info">
                 <div id="statusText" class="status-text">Running...</div>
                 <div id="nextNudge" class="next-nudge"></div>
             </div>
-            
+
             <div class="timer-controls">
                 <button id="pauseBtn" class="btn btn-secondary">Pause</button>
                 <button id="resetBtn" class="btn btn-secondary">Reset</button>
             </div>
         </div>
     </div>
-    
+
     <script src="timer.js"></script>
 </body>
 </html>

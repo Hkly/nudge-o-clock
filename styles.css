@@ -82,13 +82,26 @@ h1 {
     gap: 8px;
 }
 
+.progress-type {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
 .nudge-type input[type="radio"] {
     cursor: pointer;
 }
 
-.nudge-type label {
+.nudge-type label, .progress-type label {
     cursor: pointer;
     color: #333;
+}
+
+.progress-type input[type="checkbox"] {
+    cursor: pointer;
 }
 
 .inline-input {
@@ -225,4 +238,41 @@ h1 {
 .time-text.nudge-alert {
     animation: pulse 0.5s ease-in-out 3;
     color: #ff6b6b;
+}
+
+/* Circular Progress Styles */
+.circular-progress-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.circular-progress {
+    transform: rotate(-90deg);
+}
+
+.progress-bg {
+    fill: none;
+    stroke: #e9ecef;
+    stroke-width: 24;
+}
+
+.progress-circle {
+    fill: none;
+    stroke: url(#progressGradient);
+    stroke-width: 24;
+    stroke-linecap: round;
+    stroke-dasharray: 502.4; /* 2 * π * 80 */
+    stroke-dashoffset: 502.4;
+    transition: stroke-dashoffset 0.3s linear;
+}
+
+/* Circular nudge markers */
+.circular-nudge-marker {
+    fill: #ff6b6b;
+    r: 12;
+}
+
+.circular-nudge-marker.completed {
+    fill: #51cf66;
 }

@@ -22,43 +22,50 @@ const nudgeMarkers = document.getElementById('nudgeMarkers');
 const statusText = document.getElementById('statusText');
 const nextNudge = document.getElementById('nextNudge');
 
+// Progress bar elements
+const progressBar = document.getElementById('progressBar');
+const circularProgressContainer = document.getElementById('circularProgressContainer');
+const progressCircle = document.getElementById('progressCircle');
+const circularNudgeMarkers = document.getElementById('circularNudgeMarkers');
+
 // Radio buttons and inputs
 const nudgeCountRadio = document.getElementById('nudgeCount');
 const nudgeCountValue = document.getElementById('nudgeCountValue');
 const nudgePercentRadio = document.getElementById('nudgePercent');
 const nudgePercentValue = document.getElementById('nudgePercentValue');
+const circularProgressCheckbox = document.getElementById('circularProgress');
 
 // Play a chime sound
 function playChime() {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    
+
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    
+
     oscillator.frequency.value = 800;
     oscillator.type = 'sine';
-    
+
     gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-    
+
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.5);
-    
+
     // Play a second tone for a pleasant chime
     setTimeout(() => {
         const oscillator2 = audioContext.createOscillator();
         const gainNode2 = audioContext.createGain();
-        
+
         oscillator2.connect(gainNode2);
         gainNode2.connect(audioContext.destination);
-        
+
         oscillator2.frequency.value = 1000;
         oscillator2.type = 'sine';
-        
+
         gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
         gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
+
         oscillator2.start(audioContext.currentTime);
         oscillator2.stop(audioContext.currentTime + 0.5);
     }, 100);
@@ -68,7 +75,7 @@ function playChime() {
 function calculateNudgeTimes(totalMinutes) {
     const times = [];
     const totalSecs = totalMinutes * 60;
-    
+
     if (nudgeCountRadio.checked) {
         // Evenly distributed nudges
         const count = parseInt(nudgeCountValue.value);
@@ -82,24 +89,56 @@ function calculateNudgeTimes(totalMinutes) {
         const time = Math.floor((totalSecs * percent) / 100);
         times.push(time);
     }
-    
+
     return times.sort((a, b) => a - b);
 }
 
 // Create visual markers for nudges
 function createNudgeMarkers() {
+    if (circularProgressCheckbox.checked) {
+        createCircularNudgeMarkers();
+    } else {
+        createLinearNudgeMarkers();
+    }
+}
+
+// Create linear nudge markers
+function createLinearNudgeMarkers() {
     nudgeMarkers.innerHTML = '';
-    
+
     nudgeTimes.forEach(nudgeTime => {
         const marker = document.createElement('div');
         marker.className = 'nudge-marker';
         marker.dataset.time = nudgeTime;
-        
+
         // Position based on percentage of total time
         const percentage = (nudgeTime / totalSeconds) * 100;
         marker.style.left = `${percentage}%`;
-        
+
         nudgeMarkers.appendChild(marker);
+    });
+}
+
+// Create circular nudge markers
+function createCircularNudgeMarkers() {
+    circularNudgeMarkers.innerHTML = '';
+
+    nudgeTimes.forEach(nudgeTime => {
+        const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        marker.setAttribute('class', 'circular-nudge-marker');
+        marker.dataset.time = nudgeTime;
+
+        // Position based on percentage around the circle
+        const percentage = nudgeTime / totalSeconds;
+        const angle = percentage * 2 * Math.PI;
+        const x = 100 + 80 * Math.cos(angle);
+        const y = 100 + 80 * Math.sin(angle);
+
+        marker.setAttribute('cx', x);
+        marker.setAttribute('cy', y);
+        marker.setAttribute('r', '6');
+
+        circularNudgeMarkers.appendChild(marker);
     });
 }
 
@@ -107,7 +146,7 @@ function createNudgeMarkers() {
 function updateNextNudgeDisplay() {
     const elapsed = totalSeconds - remainingSeconds;
     const upcomingNudges = nudgeTimes.filter(t => t > elapsed && !completedNudges.has(t));
-    
+
     if (upcomingNudges.length > 0) {
         const nextNudgeTime = upcomingNudges[0];
         const timeUntilNudge = nextNudgeTime - elapsed;
@@ -131,38 +170,55 @@ function formatTime(seconds) {
 // Update the timer display
 function updateDisplay() {
     timeText.textContent = formatTime(remainingSeconds);
-    
-    // Update progress bar (showing time elapsed)
+
+    // Calculate progress (time elapsed)
     const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-    progressFill.style.width = `${progress}%`;
-    
-    // Update nudge markers
     const elapsed = totalSeconds - remainingSeconds;
-    document.querySelectorAll('.nudge-marker').forEach(marker => {
-        const markerTime = parseInt(marker.dataset.time);
-        if (elapsed >= markerTime) {
-            marker.classList.add('completed');
-        }
-    });
-    
+
+    if (circularProgressCheckbox.checked) {
+        // Update circular progress
+        const circumference = 2 * Math.PI * 80; // radius = 80
+        const offset = circumference - (progress / 100) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+
+        // Update circular nudge markers
+        document.querySelectorAll('.circular-nudge-marker').forEach(marker => {
+            const markerTime = parseInt(marker.dataset.time);
+            if (elapsed >= markerTime) {
+                marker.classList.add('completed');
+            }
+        });
+    } else {
+        // Update linear progress bar
+        progressFill.style.width = `${progress}%`;
+
+        // Update linear nudge markers
+        document.querySelectorAll('.nudge-marker').forEach(marker => {
+            const markerTime = parseInt(marker.dataset.time);
+            if (elapsed >= markerTime) {
+                marker.classList.add('completed');
+            }
+        });
+    }
+
     updateNextNudgeDisplay();
 }
 
 // Check for nudges
 function checkNudges() {
     const elapsed = totalSeconds - remainingSeconds;
-    
+
     nudgeTimes.forEach(nudgeTime => {
         if (elapsed >= nudgeTime && !completedNudges.has(nudgeTime)) {
             completedNudges.add(nudgeTime);
             playChime();
-            
+
             // Visual feedback
             timeText.classList.add('nudge-alert');
             setTimeout(() => {
                 timeText.classList.remove('nudge-alert');
             }, 1500);
-            
+
             // Show notification
             if ('Notification' in window && Notification.permission === 'granted') {
                 new Notification('Nudge O\'Clock', {
@@ -176,22 +232,33 @@ function checkNudges() {
 // Timer tick
 function tick() {
     if (isPaused) return;
-    
+
     remainingSeconds--;
     updateDisplay();
     checkNudges();
-    
+
     if (remainingSeconds <= 0) {
         stopTimer();
         statusText.textContent = 'Timer Complete!';
         playChime();
         setTimeout(() => playChime(), 300);
-        
+
         if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Nudge O\'Clock', {
                 body: 'Timer complete!'
             });
         }
+    }
+}
+
+// Toggle progress display type
+function toggleProgressDisplay() {
+    if (circularProgressCheckbox.checked) {
+        progressBar.style.display = 'none';
+        circularProgressContainer.style.display = 'flex';
+    } else {
+        progressBar.style.display = 'block';
+        circularProgressContainer.style.display = 'none';
     }
 }
 
@@ -202,27 +269,30 @@ function startTimer() {
         alert('Please enter a valid duration');
         return;
     }
-    
+
     // Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
     }
-    
+
     totalSeconds = minutes * 60;
     remainingSeconds = totalSeconds;
     nudgeTimes = calculateNudgeTimes(minutes);
     completedNudges.clear();
-    
+
     timerSetup.style.display = 'none';
     timerDisplay.style.display = 'block';
-    
+
+    // Set up progress display type
+    toggleProgressDisplay();
+
     createNudgeMarkers();
     updateDisplay();
-    
+
     statusText.textContent = 'Running...';
     pauseBtn.textContent = 'Pause';
     isPaused = false;
-    
+
     timerInterval = setInterval(tick, 1000);
 }
 
@@ -237,7 +307,7 @@ function stopTimer() {
 // Pause/Resume the timer
 function togglePause() {
     isPaused = !isPaused;
-    
+
     if (isPaused) {
         pauseBtn.textContent = 'Resume';
         statusText.textContent = 'Paused';
