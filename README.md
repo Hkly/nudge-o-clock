@@ -82,52 +82,7 @@ npm run preview
 - `npm run preview` - Preview production build
 - `npm run clean` - Clean build directory
 
-### GitHub Pages Deployment
-This project is configured for automatic deployment to GitHub Pages:
 
-#### Automatic Deployment
-1. **Push to main branch** - Automatic deployment via GitHub Actions
-2. **Enable GitHub Pages** in repository settings:
-   - Go to Settings → Pages
-   - Source: "GitHub Actions"
-   - The site will be available at: `https://Hkly.github.io/nudge-o-clock`
-
-#### Manual Deployment (if needed)
-```bash
-# Build the project
-npm run build
-
-# The dist/ folder contains the static files ready for deployment
-# You can upload the contents of dist/ to any static hosting service
-```
-
-#### GitHub Actions Workflow
-The project includes a `.github/workflows/deploy.yml` file that:
-- Automatically builds the project when code is pushed to main
-- Deploys the built files to GitHub Pages
-- Uses Node.js 18 and caches dependencies for faster builds
-
-### CSS Architecture
-The project uses a sophisticated CSS setup with:
-- **CSS Custom Properties** for dynamic theming
-- **Tailwind Components** for reusable UI elements
-- **CSS Variables** that adapt to light/dark themes
-- **Utility Classes** for rapid development
-
-### Custom CSS Variables
-The application uses CSS custom properties for theming:
-```css
-:root {
-  --color-primary: theme('colors.primary.500');
-  --color-background: theme('colors.white');
-  --gradient-primary: linear-gradient(...);
-}
-
-.dark {
-  --color-primary: theme('colors.primary.400');
-  --color-background: theme('colors.gray.800');
-}
-```
 
 ### Browser Compatibility
 - Modern browsers with ES6+ support
@@ -150,31 +105,6 @@ nudge-o-clock/
 └── README.md          # This documentation
 ```
 
-## 🎯 Accessibility Features
-
-- **Keyboard Navigation**: Full keyboard support
-- **Screen Reader Friendly**: Semantic HTML and proper ARIA labels
-- **High Contrast**: Excellent contrast ratios in both themes
-- **Visual Indicators**: Clear progress visualization with color coding
-- **Audio Feedback**: Optional sound alerts for time events
-
-## 🔄 Migration from CSS to Tailwind
-
-This application has been fully migrated from custom CSS to Tailwind CSS with a proper build system, providing:
-- **Consistent Design**: Utility classes ensure design consistency
-- **Better Maintainability**: Atomic CSS approach reduces style conflicts
-- **Responsive Design**: Built-in responsive utilities
-- **Advanced Theming**: CSS custom properties with Tailwind integration
-- **Performance**: Optimized CSS output with PurgeCSS
-- **Developer Experience**: Hot reload and build optimization with Vite
-- **CSS Variables**: Theme-aware custom properties for dynamic styling
-
-## 📱 Responsive Design
-
-The application adapts seamlessly across devices:
-- **Desktop**: Full-featured interface with hover effects
-- **Tablet**: Touch-friendly controls with appropriate sizing
-- **Mobile**: Optimized layout for small screens
 
 ## 🎵 Audio Features
 
