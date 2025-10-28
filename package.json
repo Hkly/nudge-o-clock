@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "serve": "vite preview --port 3000",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf docs"
   },
   "repository": {
     "type": "git",

@@ -9,8 +9,8 @@ export default defineConfig({
 
   // Build configuration
   build: {
-    // Output directory
-    outDir: 'dist',
+    // Output directory - use docs for GitHub Pages compatibility
+    outDir: 'docs',
 
     // Clean output directory before build
     emptyOutDir: true,
