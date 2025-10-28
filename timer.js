@@ -27,8 +27,6 @@ const nudgeCountRadio = document.getElementById('nudgeCount');
 const nudgeCountValue = document.getElementById('nudgeCountValue');
 const nudgePercentRadio = document.getElementById('nudgePercent');
 const nudgePercentValue = document.getElementById('nudgePercentValue');
-const nudgeLastRadio = document.getElementById('nudgeLast');
-const nudgeLastValue = document.getElementById('nudgeLastValue');
 
 // Play a chime sound
 function playChime() {
@@ -82,11 +80,6 @@ function calculateNudgeTimes(totalMinutes) {
         // Nudge at specific percentage
         const percent = parseInt(nudgePercentValue.value);
         const time = Math.floor((totalSecs * percent) / 100);
-        times.push(time);
-    } else if (nudgeLastRadio.checked) {
-        // Nudge at last X% of time
-        const percent = parseInt(nudgeLastValue.value);
-        const time = Math.floor(totalSecs * (1 - percent / 100));
         times.push(time);
     }
     
