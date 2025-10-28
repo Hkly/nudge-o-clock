@@ -12,6 +12,7 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 // DOM elements
 const timerSetup = document.getElementById('timerSetup');
 const timerDisplay = document.getElementById('timerDisplay');
+const nudgeOptions = document.getElementById('nudgeOptions');
 const minutesInput = document.getElementById('minutes');
 const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
@@ -33,7 +34,13 @@ const nudgeCountRadio = document.getElementById('nudgeCount');
 const nudgeCountValue = document.getElementById('nudgeCountValue');
 const nudgePercentRadio = document.getElementById('nudgePercent');
 const nudgePercentValue = document.getElementById('nudgePercentValue');
-const circularProgressCheckbox = document.getElementById('circularProgress');
+
+// Progress toggle elements
+const progressToggleBtn = document.getElementById('progressToggleBtn');
+const toggleIcon = document.getElementById('toggleIcon');
+
+// Progress state
+let isCircularProgress = false;
 
 // Play a chime sound
 function playChime() {
@@ -95,7 +102,7 @@ function calculateNudgeTimes(totalMinutes) {
 
 // Create visual markers for nudges
 function createNudgeMarkers() {
-    if (circularProgressCheckbox.checked) {
+    if (isCircularProgress) {
         createCircularNudgeMarkers();
     } else {
         createLinearNudgeMarkers();
@@ -175,36 +182,34 @@ function updateDisplay() {
     const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
     const elapsed = totalSeconds - remainingSeconds;
 
-    if (circularProgressCheckbox.checked) {
-        // Update circular progress
-        const circumference = 2 * Math.PI * 80; // radius = 80
-        const offset = circumference - (progress / 100) * circumference;
-        progressCircle.style.strokeDashoffset = offset;
+    // Always update both progress indicators to keep them in sync
 
-        // Update circular nudge markers
-        document.querySelectorAll('.circular-nudge-marker').forEach(marker => {
-            const markerTime = parseInt(marker.dataset.time);
-            if (elapsed >= markerTime) {
-                marker.classList.add('completed');
-            }
-        });
-    } else {
-        // Update linear progress bar
-        progressFill.style.width = `${progress}%`;
+    // Update linear progress bar
+    progressFill.style.width = `${progress}%`;
 
-        // Update linear nudge markers
-        document.querySelectorAll('.nudge-marker').forEach(marker => {
-            const markerTime = parseInt(marker.dataset.time);
-            if (elapsed >= markerTime) {
-                marker.classList.add('completed');
-            }
-        });
-    }
+    // Update linear nudge markers
+    document.querySelectorAll('.nudge-marker').forEach(marker => {
+        const markerTime = parseInt(marker.dataset.time);
+        if (elapsed >= markerTime) {
+            marker.classList.add('completed');
+        }
+    });
+
+    // Update circular progress
+    const circumference = 2 * Math.PI * 80; // radius = 80
+    const offset = circumference - (progress / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;
+
+    // Update circular nudge markers
+    document.querySelectorAll('.circular-nudge-marker').forEach(marker => {
+        const markerTime = parseInt(marker.dataset.time);
+        if (elapsed >= markerTime) {
+            marker.classList.add('completed');
+        }
+    });
 
     updateNextNudgeDisplay();
-}
-
-// Check for nudges
+}// Check for nudges
 function checkNudges() {
     const elapsed = totalSeconds - remainingSeconds;
 
@@ -253,13 +258,69 @@ function tick() {
 
 // Toggle progress display type
 function toggleProgressDisplay() {
-    if (circularProgressCheckbox.checked) {
+    if (isCircularProgress) {
         progressBar.style.display = 'none';
         circularProgressContainer.style.display = 'flex';
     } else {
         progressBar.style.display = 'block';
         circularProgressContainer.style.display = 'none';
     }
+}
+
+// Handle progress toggle button click
+function handleProgressToggle() {
+    isCircularProgress = !isCircularProgress;
+
+    // Update button text and icon
+    if (isCircularProgress) {
+        toggleIcon.textContent = '●';
+        progressToggleBtn.innerHTML = '<span id="toggleIcon">●</span> Circle';
+    } else {
+        toggleIcon.textContent = '▬';
+        progressToggleBtn.innerHTML = '<span id="toggleIcon">▬</span> Bar';
+    }
+
+    // Switch display
+    toggleProgressDisplay();
+
+    // Ensure both types of markers exist
+    createLinearNudgeMarkers();
+    createCircularNudgeMarkers();
+
+    // Update display with current progress
+    updateDisplay();
+}
+
+// Preview display for setup mode
+function updatePreviewDisplay() {
+    const minutes = parseInt(minutesInput.value) || 30;
+    const previewTotalSeconds = minutes * 60;
+
+    // Create nudge markers for current settings
+    createLinearNudgeMarkers();
+    createCircularNudgeMarkers();
+
+    // Show progress at 50% for preview
+    const previewProgress = 50;
+    const previewElapsed = (previewTotalSeconds * previewProgress) / 100;
+
+    // Update linear progress
+    progressFill.style.width = `${previewProgress}%`;
+
+    // Update circular progress
+    const circumference = 2 * Math.PI * 80;
+    const offset = circumference - (previewProgress / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;
+
+    // Update nudge markers to show some as completed
+    document.querySelectorAll('.nudge-marker, .circular-nudge-marker').forEach(marker => {
+        const markerTime = parseInt(marker.dataset.time);
+        if (previewElapsed >= markerTime) {
+            marker.classList.add('completed');
+        } else {
+            marker.classList.remove('completed');
+        }
+    });
 }
 
 // Start the timer
@@ -280,13 +341,18 @@ function startTimer() {
     nudgeTimes = calculateNudgeTimes(minutes);
     completedNudges.clear();
 
-    timerSetup.style.display = 'none';
+    // Hide nudge options, start button and show timer display and time text
+    nudgeOptions.style.display = 'none';
+    startBtn.style.display = 'none';
     timerDisplay.style.display = 'block';
+    timeText.style.display = 'block';
 
     // Set up progress display type
     toggleProgressDisplay();
 
-    createNudgeMarkers();
+    // Create both types of nudge markers to keep them in sync
+    createLinearNudgeMarkers();
+    createCircularNudgeMarkers();
     updateDisplay();
 
     statusText.textContent = 'Running...';
@@ -321,18 +387,48 @@ function togglePause() {
 function resetTimer() {
     stopTimer();
     timerDisplay.style.display = 'none';
-    timerSetup.style.display = 'block';
+    timeText.style.display = 'none';
+    nudgeOptions.style.display = 'block';
+    startBtn.style.display = 'block';
     completedNudges.clear();
+
+    // Reset progress display to show preview state
+    updatePreviewDisplay();
 }
 
 // Event listeners
 startBtn.addEventListener('click', startTimer);
 pauseBtn.addEventListener('click', togglePause);
 resetBtn.addEventListener('click', resetTimer);
+progressToggleBtn.addEventListener('click', handleProgressToggle);
+
+// Update preview when settings change
+minutesInput.addEventListener('input', updatePreviewDisplay);
+
+nudgeCountRadio.addEventListener('change', updatePreviewDisplay);
+
+nudgeCountValue.addEventListener('input', () => {
+    if (nudgeCountRadio.checked) {
+        updatePreviewDisplay();
+    }
+});
+
+nudgePercentRadio.addEventListener('change', updatePreviewDisplay);
+
+nudgePercentValue.addEventListener('input', () => {
+    if (nudgePercentRadio.checked) {
+        updatePreviewDisplay();
+    }
+});
 
 // Allow Enter key to start timer
 minutesInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         startTimer();
     }
+});
+
+// Initialize preview on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updatePreviewDisplay();
 });
