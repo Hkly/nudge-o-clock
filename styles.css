@@ -91,32 +91,6 @@ h1 {
     margin-bottom: 0;
 }
 
-.preview-section {
-    background: #f0f2f5;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 25px;
-    border: 2px solid #e9ecef;
-}
-
-.preview-section h3 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 1.1em;
-    text-align: center;
-}
-
-.preview-progress-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80px;
-}
-
-.preview-progress {
-    max-width: 300px;
-}
-
 .nudge-type {
     margin-bottom: 15px;
     display: flex;
@@ -124,26 +98,13 @@ h1 {
     gap: 8px;
 }
 
-.progress-type {
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-}
-
 .nudge-type input[type="radio"] {
     cursor: pointer;
 }
 
-.nudge-type label, .progress-type label {
+.nudge-type label {
     cursor: pointer;
     color: #333;
-}
-
-.progress-type input[type="checkbox"] {
-    cursor: pointer;
 }
 
 .inline-input {
@@ -343,10 +304,4 @@ h1 {
 
 .circular-nudge-marker.completed {
     fill: #51cf66;
-}
-
-/* Preview specific styles */
-#previewProgressCircle {
-    stroke-dasharray: 408.4; /* 2 * π * 65 */
-    stroke-dashoffset: 408.4;
 }

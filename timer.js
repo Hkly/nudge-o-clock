@@ -100,15 +100,6 @@ function calculateNudgeTimes(totalMinutes) {
     return times.sort((a, b) => a - b);
 }
 
-// Create visual markers for nudges
-function createNudgeMarkers() {
-    if (isCircularProgress) {
-        createCircularNudgeMarkers();
-    } else {
-        createLinearNudgeMarkers();
-    }
-}
-
 // Create linear nudge markers
 function createLinearNudgeMarkers() {
     nudgeMarkers.innerHTML = '';
@@ -209,7 +200,9 @@ function updateDisplay() {
     });
 
     updateNextNudgeDisplay();
-}// Check for nudges
+}
+
+// Check for nudges
 function checkNudges() {
     const elapsed = totalSeconds - remainingSeconds;
 
