@@ -69,18 +69,6 @@
     background-color: theme('colors.gray.700');
   }
 
-  .btn-toggle {
-    @apply px-4 py-2 text-sm font-semibold rounded-lg inline-flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5;
-    background-color: var(--color-surface);
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-  }
-
-  .btn-toggle:hover {
-    background-color: var(--color-primary);
-    color: white;
-  }
-
   .preset-btn {
     @apply px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-0.5;
     background-color: var(--color-surface);
@@ -140,18 +128,6 @@
     border-color: var(--color-primary);
   }
 
-  .progress-bar-container {
-    @apply w-full h-8 rounded-full relative overflow-visible;
-    background-color: var(--color-progress-bg);
-  }
-
-  .progress-fill {
-    @apply h-full rounded-full;
-    background: var(--gradient-progress);
-    transition: width 0.3s linear;
-    width: 0%;
-  }
-
   .text-primary-themed {
     color: var(--color-primary);
   }
@@ -177,16 +153,7 @@
   }
 }
 
-/* Nudge marker styles */
-.nudge-marker {
-  @apply absolute -top-1 w-1 h-10 rounded-sm transform -translate-x-1/2 transition-colors duration-300;
-  background-color: var(--color-nudge-pending);
-}
-
-.nudge-marker.completed {
-  background-color: var(--color-nudge-completed);
-}
-
+/* Circular nudge marker styles */
 .circular-nudge-marker {
   transition: fill 0.3s ease;
   fill: var(--color-nudge-pending);

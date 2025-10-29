@@ -56,13 +56,6 @@ export class UIManager {
         // Theme toggle
         this.elements.themeToggle.addEventListener('click', () => this.themeManager.toggle());
 
-        // Progress bar toggle (handled by ProgressBarManager)
-        const progressToggleBtn = document.getElementById('progressToggleBtn');
-        progressToggleBtn.addEventListener('click', () => {
-            this.progressBarManager.toggle();
-            this._updatePreview();
-        });
-
         // Settings change listeners
         this.elements.minutesInput.addEventListener('input', () => {
             this._updatePreview();

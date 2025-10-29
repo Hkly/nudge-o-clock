@@ -1,9 +1,8 @@
 /**
- * ProgressBarManager class - handles both linear and circular progress displays
+ * ProgressBarManager class - handles circular progress display
  */
 export class ProgressBarManager {
     constructor() {
-        this.isCircular = false;
         this.elements = this._getElements();
         this.nudgeMarkers = [];
         this.CIRCLE_RADIUS = 80;
@@ -15,55 +14,10 @@ export class ProgressBarManager {
      */
     _getElements() {
         return {
-            progressBar: document.getElementById('progressBar'),
-            progressFill: document.getElementById('progressFill'),
-            nudgeMarkers: document.getElementById('nudgeMarkers'),
             circularContainer: document.getElementById('circularProgressContainer'),
             progressCircle: document.getElementById('progressCircle'),
-            circularNudgeMarkers: document.getElementById('circularNudgeMarkers'),
-            toggleBtn: document.getElementById('progressToggleBtn'),
-            toggleIcon: document.getElementById('toggleIcon')
+            circularNudgeMarkers: document.getElementById('circularNudgeMarkers')
         };
-    }
-
-    /**
-     * Toggle between linear and circular progress display
-     */
-    toggle() {
-        this.isCircular = !this.isCircular;
-        this._updateToggleButton();
-        this._updateDisplay();
-        return this.isCircular;
-    }
-
-    /**
-     * Update the toggle button appearance
-     */
-    _updateToggleButton() {
-        if (this.isCircular) {
-            this.elements.toggleIcon.textContent = '●';
-            this.elements.toggleBtn.innerHTML = '<span id="toggleIcon">●</span> Circle';
-        } else {
-            this.elements.toggleIcon.textContent = '▬';
-            this.elements.toggleBtn.innerHTML = '<span id="toggleIcon">▬</span> Bar';
-        }
-        // Re-get the toggle icon element after innerHTML change
-        this.elements.toggleIcon = document.getElementById('toggleIcon');
-    }
-
-    /**
-     * Update which progress display is visible
-     */
-    _updateDisplay() {
-        if (this.isCircular) {
-            this.elements.progressBar.classList.add('hidden');
-            this.elements.circularContainer.classList.remove('hidden');
-            this.elements.circularContainer.classList.add('flex');
-        } else {
-            this.elements.progressBar.classList.remove('hidden');
-            this.elements.circularContainer.classList.add('hidden');
-            this.elements.circularContainer.classList.remove('flex');
-        }
     }
 
     /**
@@ -71,29 +25,8 @@ export class ProgressBarManager {
      */
     createNudgeMarkers(nudgeTimes, totalSeconds) {
         this.nudgeMarkers = nudgeTimes;
-        this._createLinearMarkers(nudgeTimes, totalSeconds);
         this._createCircularMarkers(nudgeTimes, totalSeconds);
-    }
-
-    /**
-     * Create linear progress nudge markers
-     */
-    _createLinearMarkers(nudgeTimes, totalSeconds) {
-        this.elements.nudgeMarkers.innerHTML = '';
-
-        nudgeTimes.forEach(nudgeTime => {
-            const marker = document.createElement('div');
-            marker.className = 'nudge-marker';
-            marker.dataset.time = nudgeTime;
-
-            const percentage = (nudgeTime / totalSeconds) * 100;
-            marker.style.left = `${percentage}%`;
-
-            this.elements.nudgeMarkers.appendChild(marker);
-        });
-    }
-
-    /**
+    }    /**
      * Create circular progress nudge markers
      */
     _createCircularMarkers(nudgeTimes, totalSeconds) {
@@ -121,9 +54,6 @@ export class ProgressBarManager {
      * Update progress display with current timer state
      */
     updateProgress(progress, elapsedSeconds) {
-        // Update linear progress
-        this.elements.progressFill.style.width = `${progress}%`;
-
         // Update circular progress
         const offset = this.CIRCLE_CIRCUMFERENCE - (progress / 100) * this.CIRCLE_CIRCUMFERENCE;
         this.elements.progressCircle.style.strokeDashoffset = offset;
@@ -136,16 +66,6 @@ export class ProgressBarManager {
      * Update nudge marker visual states based on elapsed time
      */
     _updateMarkerStates(elapsedSeconds) {
-        // Update linear markers
-        document.querySelectorAll('.nudge-marker').forEach(marker => {
-            const markerTime = parseInt(marker.dataset.time);
-            if (elapsedSeconds >= markerTime) {
-                marker.classList.add('completed');
-            } else {
-                marker.classList.remove('completed');
-            }
-        });
-
         // Update circular markers
         document.querySelectorAll('.circular-nudge-marker').forEach(marker => {
             const markerTime = parseInt(marker.dataset.time);
@@ -162,7 +82,6 @@ export class ProgressBarManager {
      */
     reset() {
         this.updateProgress(0, 0);
-        this.elements.nudgeMarkers.innerHTML = '';
         this.elements.circularNudgeMarkers.innerHTML = '';
     }
 }

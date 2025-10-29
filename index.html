@@ -13,19 +13,9 @@
 
         <div class="timer-setup" id="timerSetup">
             <div class="card-section">
-                <div class="flex justify-center mb-5">
-                    <button id="progressToggleBtn" class="btn-toggle">
-                        <span id="toggleIcon">▬</span> Bar
-                    </button>
-                </div>
-
                 <div class="time-remaining">
                     <div id="timeText" class="text-5xl font-bold text-themed mb-5 text-center font-mono hidden">30:00</div>
-                    <div id="progressBar" class="progress-bar-container">
-                        <div id="progressFill" class="progress-fill"></div>
-                        <div id="nudgeMarkers" class="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
-                    </div>
-                    <div id="circularProgressContainer" class="flex justify-center my-5 hidden">
+                    <div id="circularProgressContainer" class="flex justify-center my-5">
                         <svg class="circular-progress transform -rotate-90" width="200" height="200">
                             <defs>
                                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
