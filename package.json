@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp .nojekyll docs/",
     "preview": "vite preview",
     "serve": "vite preview --port 3000",
     "clean": "rm -rf docs"
