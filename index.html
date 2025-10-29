@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nudge O'Clock - Interval Timer</title>
-  <script type="module" crossorigin src="/nudge-o-clock/assets/main-BlTPhw80.js"></script>
-  <link rel="stylesheet" crossorigin href="/nudge-o-clock/assets/style-BwMBtuIl.css">
+  <script type="module" crossorigin src="/nudge-o-clock/assets/main-CNYuvRSK.js"></script>
+  <link rel="stylesheet" crossorigin href="/nudge-o-clock/assets/style-CvpQhhKl.css">
 </head>
 <body class="min-h-screen gradient-bg flex items-center justify-center p-5 transition-colors duration-300">
     <div class="card">
@@ -47,6 +47,15 @@
 
                 <div class="mb-6">
                     <label for="minutes" class="block mb-2 font-semibold text-themed">Timer Duration (minutes):</label>
+                    <div class="mb-3">
+                        <div class="text-sm text-muted-themed mb-2">Quick presets:</div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button class="preset-btn" data-minutes="5">5 min</button>
+                            <button class="preset-btn" data-minutes="10">10 min</button>
+                            <button class="preset-btn" data-minutes="30">30 min</button>
+                            <button class="preset-btn" data-minutes="60">60 min</button>
+                        </div>
+                    </div>
                     <input type="number" id="minutes" min="1" max="1440" value="30" class="input-field">
                 </div>
 
