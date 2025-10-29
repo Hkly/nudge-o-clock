@@ -174,6 +174,7 @@ export class UIManager {
     _onTimerComplete(state) {
         this.elements.statusText.textContent = 'Timer Complete!';
         this._showNudgeAlert();
+        this.nudgeManager.triggerCompletion();
     }
 
     /**

@@ -49,4 +49,5 @@ export class NotificationManager {
     isAvailable() {
         return 'Notification' in window && Notification.permission === 'granted';
     }
+
 }

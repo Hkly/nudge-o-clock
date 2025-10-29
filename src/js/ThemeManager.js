@@ -42,10 +42,5 @@ export class ThemeManager {
         }
     }
 
-    /**
-     * Get current theme state
-     */
-    isDark() {
-        return this.isDarkMode;
-    }
+
 }

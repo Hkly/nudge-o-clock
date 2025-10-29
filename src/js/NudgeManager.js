@@ -56,6 +56,14 @@ export class NudgeManager {
     }
 
     /**
+     * Trigger completion audio and notification
+     */
+    triggerCompletion() {
+        this.audioManager.playComplete();
+        this.notificationManager.showComplete();
+    }
+
+    /**
      * Get next upcoming nudge information
      */
     getNextNudge(elapsedSeconds) {
@@ -84,12 +92,7 @@ export class NudgeManager {
         return [...this.nudgeTimes];
     }
 
-    /**
-     * Get completed nudges
-     */
-    getCompletedNudges() {
-        return new Set(this.completedNudges);
-    }
+
 
     /**
      * Reset nudge state
