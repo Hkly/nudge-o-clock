@@ -2,7 +2,7 @@
   "name": "nudge-o-clock",
   "version": "1.0.0",
   "description": "A timer application with interval nudges designed to help with time blindness. Now featuring Tailwind CSS styling and dual theme support!",
-  "main": "timer.js",
+  "main": "src/main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
