@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build output (keep docs/ for GitHub Pages)
-dist/
+# Build output
+docs/
 
 # Editor directories and files
 .vscode/*
