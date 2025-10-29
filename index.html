@@ -46,6 +46,15 @@
 
                 <div class="mb-6">
                     <label for="minutes" class="block mb-2 font-semibold text-themed">Timer Duration (minutes):</label>
+                    <div class="mb-3">
+                        <div class="text-sm text-muted-themed mb-2">Quick presets:</div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button class="preset-btn" data-minutes="5">5 min</button>
+                            <button class="preset-btn" data-minutes="10">10 min</button>
+                            <button class="preset-btn" data-minutes="30">30 min</button>
+                            <button class="preset-btn" data-minutes="60">60 min</button>
+                        </div>
+                    </div>
                     <input type="number" id="minutes" min="1" max="1440" value="30" class="input-field">
                 </div>
 

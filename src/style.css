@@ -81,6 +81,25 @@
     color: white;
   }
 
+  .preset-btn {
+    @apply px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-0.5;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+  }
+
+  .preset-btn:hover {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .preset-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
   .theme-toggle {
     @apply fixed bottom-6 right-6 w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center text-xl;
     background-color: var(--color-background);

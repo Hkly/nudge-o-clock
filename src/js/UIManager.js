@@ -35,6 +35,7 @@ export class UIManager {
             pauseBtn: document.getElementById('pauseBtn'),
             resetBtn: document.getElementById('resetBtn'),
             themeToggle: document.getElementById('themeToggle'),
+            presetBtns: document.querySelectorAll('.preset-btn'),
 
             // Display elements
             timeText: document.getElementById('timeText'),
@@ -63,7 +64,10 @@ export class UIManager {
         });
 
         // Settings change listeners
-        this.elements.minutesInput.addEventListener('input', () => this._updatePreview());
+        this.elements.minutesInput.addEventListener('input', () => {
+            this._updatePreview();
+            this._updateActivePreset();
+        });
         this.elements.nudgeCountRadio.addEventListener('change', () => this._updatePreview());
         this.elements.nudgeCountValue.addEventListener('input', () => {
             if (this.elements.nudgeCountRadio.checked) {
@@ -82,6 +86,14 @@ export class UIManager {
             if (e.key === 'Enter') {
                 this.startTimer();
             }
+        });
+
+        // Preset button listeners
+        this.elements.presetBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const minutes = parseInt(e.target.dataset.minutes);
+                this._setMinutes(minutes);
+            });
         });
     }
 
@@ -276,5 +288,31 @@ export class UIManager {
      */
     initialize() {
         this._updatePreview();
+        this._updateActivePreset();
+    }
+
+    /**
+     * Set the minutes input value and update UI
+     */
+    _setMinutes(minutes) {
+        this.elements.minutesInput.value = minutes;
+        this._updatePreview();
+        this._updateActivePreset();
+    }
+
+    /**
+     * Update active preset button styling
+     */
+    _updateActivePreset() {
+        const currentMinutes = parseInt(this.elements.minutesInput.value);
+        
+        this.elements.presetBtns.forEach(btn => {
+            const btnMinutes = parseInt(btn.dataset.minutes);
+            if (btnMinutes === currentMinutes) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
     }
 }
