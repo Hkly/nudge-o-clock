@@ -305,7 +305,7 @@ export class UIManager {
      */
     _updateActivePreset() {
         const currentMinutes = parseInt(this.elements.minutesInput.value);
-        
+
         this.elements.presetBtns.forEach(btn => {
             const btnMinutes = parseInt(btn.dataset.minutes);
             if (btnMinutes === currentMinutes) {
