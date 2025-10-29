@@ -2,7 +2,7 @@
 
 A simple interval timer with gentle nudges to help with time awareness.
 
-🔗 **https://github.com/Hkly/nudge-o-clock**
+🔗 **https://Hkly.github.io/nudge-o-clock**
 
 ## ✨ Features
 
