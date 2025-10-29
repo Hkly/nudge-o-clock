@@ -2,12 +2,14 @@
 
 A simple interval timer with gentle nudges to help with time awareness.
 
+🔗 **https://github.com/Hkly/nudge-o-clock**
+
 ## ✨ Features
 
 - Set timer from 1-1440 minutes
 - Audio alerts and desktop notifications
 - Light/dark theme toggle
-- Visual progress (bar or circular)
+- Visual progress indicator
 - Configurable nudge intervals
 
 ## 🚀 Development
